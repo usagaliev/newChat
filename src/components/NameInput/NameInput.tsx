@@ -1,45 +1,40 @@
 import { USER_KEY } from '../../constants'
 import { nanoid } from 'nanoid'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, FC, ChangeEvent, FormEvent } from 'react'
 import storage from '../../utils/storage'
 
-export const NameInput = () => {
-	// начальные данные
-	const [formData, setFormData] = useState({
+interface FormData {
+	userName: string
+	roomId: string
+}
+
+export const NameInput: FC = () => {
+	const [formData, setFormData] = useState<FormData>({
 		userName: '',
-		// фиксируем ("хардкодим") название (идентификатор) комнаты
 		roomId: 'main_room'
 	})
-	// состояние блокировки кнопки
-	const [submitDisabled, setSubmitDisabled] = useState(true)
+	const [submitDisabled, setSubmitDisabled] = useState<boolean>(true)
 
-	// все поля формы являются обязательными
 	useEffect(() => {
 		const isSomeFieldEmpty = Object.values(formData).some((v) => !v.trim())
 		setSubmitDisabled(isSomeFieldEmpty)
 	}, [formData])
 
-	// функция для изменения данных
-	const onChange = ({ target: { name, value } }) => {
+	const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target
 		setFormData({ ...formData, [name]: value })
 	}
 
-	// функция для отправки формы
-	const onSubmit = (e) => {
+	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		if (submitDisabled) return
 
-		// генерируем идентификатор пользователя
 		const userId = nanoid()
-
-		// записываем данные пользователя в локальное хранилище
 		storage.set(USER_KEY, {
 			userId,
 			userName: formData.userName,
 			roomId: formData.roomId
 		})
-
-		// перезагружаем приложение для того, чтобы "попасть" в комнату
 		window.location.reload()
 	}
 
@@ -59,7 +54,6 @@ export const NameInput = () => {
 						onChange={onChange}
 					/>
 				</div>
-				{/* скрываем поле для создания комнаты (возможность масштабирования) */}
 				<div className='visually-hidden'>
 					<label htmlFor='roomId'>Enter room ID</label>
 					<input
@@ -72,7 +66,7 @@ export const NameInput = () => {
 						onChange={onChange}
 					/>
 				</div>
-				<button disabled={submitDisabled} className='btn chat'>
+				<button disabled={submitDisabled} className='btn chat' type='submit'>
 					Chat
 				</button>
 			</form>

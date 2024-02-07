@@ -1,6 +1,8 @@
+import { FC } from 'react'
 import { AiOutlineUser } from 'react-icons/ai'
+import {UserListProps} from "../../types/types";
 
-export default function UserList({ users }) {
+const UserList: FC<UserListProps> = ({ users }) => {
 	return (
 		<div className='container user'>
 			<h2>Users</h2>
@@ -15,3 +17,5 @@ export default function UserList({ users }) {
 		</div>
 	)
 }
+
+export default UserList

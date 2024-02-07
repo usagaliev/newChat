@@ -1,8 +1,9 @@
+import { FC } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './routes/app.routes'
 import './App.scss'
 
-function App() {
+const App: FC = () => {
   return (
     <BrowserRouter>
       <AppRoutes />

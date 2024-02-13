@@ -1,9 +1,9 @@
 import fileApi from '../../api/file.api'
-import { USER_KEY } from '../../constants'
+import {USER_KEY} from '../../constants'
 import useCustomStore from '../../hooks/useCustomStore'
-import { nanoid } from 'nanoid'
-import { useEffect, useRef, useState, FC } from 'react'
-import { FiSend } from 'react-icons/fi'
+import {nanoid} from 'nanoid'
+import {FC, FormEvent, useEffect, useRef, useState} from 'react'
+import {FiSend} from 'react-icons/fi'
 import storage from '../../utils/storage'
 import FileUploader from './Uploader/FileUploader'
 import Recorder from './Recorder/Recorder'
@@ -15,7 +15,6 @@ interface MessageInputProps {
 
 const MessageInput: FC<MessageInputProps> = ({ sendMessage }) => {
 	const user = storage.get(USER_KEY)
-	// @ts-ignore
 	const state = useCustomStore((state: any) => state)
 	const {
 		file: storedFile,
@@ -38,7 +37,7 @@ const MessageInput: FC<MessageInputProps> = ({ sendMessage }) => {
 		setShowPreview(storedFile)
 	}, [storedFile, setShowPreview])
 
-	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
 		if (submitDisabled) return
 
@@ -56,9 +55,7 @@ const MessageInput: FC<MessageInputProps> = ({ sendMessage }) => {
 		} else {
 			try {
 				const path = await fileApi.upload({ file: storedFile, roomId })
-				const type = storedFile.type.split('/')[0]
-
-				message.messageType = type
+				message.messageType = storedFile.type.split('/')[0]
 				message.textOrPathToFile = path
 			} catch (e) {
 				console.error(e)
@@ -74,7 +71,7 @@ const MessageInput: FC<MessageInputProps> = ({ sendMessage }) => {
 		setText('')
 		setStoredFile(null)
 	}
-
+	console.log(text, 'text');
 	return (
 		<form onSubmit={onSubmit} className='form message'>
 			<CustomEmojiPicker setMessageText={setText} messageInputRef={inputRef} />

@@ -1,7 +1,7 @@
-import Picker from '@emoji-mart/react'
 import useCustomStore from '../../../hooks/useCustomStore'
 import { useCallback, useEffect, Dispatch, SetStateAction, RefObject, FC } from 'react'
 import { BsEmojiSmile } from 'react-icons/bs'
+import EmojiPicker from "@emoji-mart/react";
 
 interface CustomEmojiPickerProps {
 	setMessageText: Dispatch<SetStateAction<string>>
@@ -35,6 +35,7 @@ const CustomEmojiPicker: FC<CustomEmojiPickerProps> = ({ setMessageText, message
 	}, [onEscapeKeyPress])
 
 	const handleSelectEmoji = ({ native }: { native: string }) => {
+		console.log(native, 'native');
 		setMessageText((text) => text + native)
 		messageInputRef.current?.focus()
 	}
@@ -50,11 +51,18 @@ const CustomEmojiPicker: FC<CustomEmojiPickerProps> = ({ setMessageText, message
 				<BsEmojiSmile className='icon' />
 			</button>
 			{showEmoji && (
-				<Picker
-					onSelect={handleSelectEmoji}
+				<EmojiPicker
+					onEmojiSelect={handleSelectEmoji}
 					emojiSize={20}
 					showPreview={false}
 					perLine={6}
+					className='emoji-picker1234'
+					style={{
+						position: "absolute",
+						bottom: "80px",
+						right: "200px",
+						zIndex: 9999
+					}}
 				/>
 			)}
 		</div>
